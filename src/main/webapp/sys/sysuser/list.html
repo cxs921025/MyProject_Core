@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user</title>
+    <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+</head>
+<body>
+This is user list！
+<input type="button" value="test1" onclick="test()"></inp>
+<div id="test"></div>
+</body>
+<script>
+    function test(){
+        $.ajax({
+            type:"post",
+            url:"http://localhost:8080/sys/sysuser/getUser",
+            success: function(req){
+                console.log(req);
+                $("#test").html(req);
+            }
+        })
+    }
+</script>
+</html>
