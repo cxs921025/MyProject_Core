@@ -7,3 +7,4 @@
   1.redis
   2.shiro
   3.mybatis
+  4.dubbo
