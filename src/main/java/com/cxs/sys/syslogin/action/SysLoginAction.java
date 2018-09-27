@@ -24,12 +24,8 @@ import java.util.Map;
  */
 @RestController
 public class SysLoginAction {
-    private final SysUserService sysUserService;
-
     @Autowired
-    public SysLoginAction(SysUserService sysUserService) {
-        this.sysUserService = sysUserService;
-    }
+    private SysUserService sysUserService;
 
     /**
      * 登录
