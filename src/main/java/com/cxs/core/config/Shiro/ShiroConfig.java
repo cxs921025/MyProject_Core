@@ -2,9 +2,11 @@ package com.cxs.core.config.Shiro;
 
 import com.cxs.core.utils.LogUtil;
 import com.cxs.core.utils.PropertiesUtil;
+import com.cxs.core.utils.RedisUtil;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +17,14 @@ import java.util.Properties;
 
 @Configuration
 public class ShiroConfig {
+
+    private final RedisUtil redisUtil;
+
+    @Autowired
+    public ShiroConfig(RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
+    }
+
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -23,7 +33,7 @@ public class ShiroConfig {
         // setLoginUrl 如果不设置值，默认会自动寻找Web工程根目录下的"/login.jsp"页面 或 "/login" 映射
         shiroFilterFactoryBean.setLoginUrl("/notLogin");
         // 设置无权限时跳转的 url;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/404.html");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
         // 设置拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
@@ -54,17 +64,19 @@ public class ShiroConfig {
 
     /**
      * 自定义SessionManager
-     * @return
+     *
+     * @return SessionManager
      */
     @Bean
-    public SessionManager sessionManager(){
+    public SessionManager sessionManager() {
         SessionManager shiroSessionManager = new SessionManager();
-        // 这里可以不设置。Shiro有默认的session管理。如果缓存为Redis则需改用Redis的管理
-        //shiroSessionManager.setSessionDAO(new EnterpriseCacheSessionDAO());
         // 设置session过期时间
         shiroSessionManager.setGlobalSessionTimeout(1800000);
+        // 设置session管理
+        shiroSessionManager.setSessionDAO(new SessionRedisDao(redisUtil));
         return shiroSessionManager;
     }
+
     /**
      * 自定义身份认证 realm;
      * <p>

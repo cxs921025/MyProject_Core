@@ -2,7 +2,6 @@ package com.cxs.sys.sysuser.action;
 
 import com.cxs.core.baseframework.action.BaseAction;
 import com.cxs.core.exception.ServiceException;
-import com.cxs.core.utils.RedisUtil;
 import com.cxs.core.utils.SessionUtil;
 import com.cxs.core.vo.ReturnVo;
 import com.cxs.sys.sysuser.model.SysUserModel;
@@ -21,8 +20,6 @@ public class SysUserAction extends BaseAction<SysUserModel> {
 
     @Autowired
     private SysUserService sysUserService;
-    @Autowired
-    private RedisUtil redisUtil;
 
     @RequestMapping("getUser")
     public ReturnVo getUser() {
@@ -32,7 +29,6 @@ public class SysUserAction extends BaseAction<SysUserModel> {
             //aj.setObj(userModels);
             //SysUserModel userModel = SysUserModel.builder().id("07c11b5adfb242e48922774e6aae3691").loginName("ddd").userName("测试").password("123456").build();
             SysUserModel userModel = SysUserModel.builder().loginName("aaa").userName("测试游客").build();
-            //redisUtil.set("key","value",10);
             userModel = sysUserService.get(userModel);
             userModel.setLoginName("123");
             //sysUserService.update(userModel);

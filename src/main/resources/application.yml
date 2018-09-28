@@ -12,6 +12,7 @@ spring:
     host: 172.26.1.53
     password: 123456
     port: 6379
+    timeout: 0
     # redis线程池配置
     jedis:
       pool:
@@ -22,7 +23,7 @@ spring:
         # 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
         max-active: 2000
         # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
-        max-wait: 10000ms
+        max-wait: 10000
   dubbo:
     #application:
       # dubbo提供者的别名，只是个标识

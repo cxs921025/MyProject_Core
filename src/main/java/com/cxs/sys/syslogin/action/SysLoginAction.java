@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +25,12 @@ import java.util.Map;
  */
 @RestController
 public class SysLoginAction {
+    private final SysUserService sysUserService;
+
     @Autowired
-    private SysUserService sysUserService;
+    public SysLoginAction(SysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
 
     /**
      * 登录
@@ -51,7 +56,8 @@ public class SysLoginAction {
             subject.login(token);
             // 在session中存放用户信息
             LogUtil.info("[登录]: 将用户信息存放到session中");
-            subject.getSession().setAttribute("SysUserModel", user);
+            Session session = subject.getSession();
+            session.setAttribute("SysUserModel", user);
             Map<String, Object> attributes = new HashMap<>();
             // 返回sessionId 作为token
             attributes.put("token", subject.getSession().getId());
@@ -68,10 +74,23 @@ public class SysLoginAction {
     /**
      * 未登录
      */
-    @RequestMapping("/notLogin")
-    public ReturnVo notLogin(){
+    @RequestMapping("/403")
+    public ReturnVo unauthorizedUrl() {
         ReturnVo returnVo = new ReturnVo();
-        returnVo.setMsg("您还没有登录");
+        returnVo.setMsg("没有权限");
+        returnVo.setSuccess(false);
         return returnVo;
     }
+
+    /**
+     * 出错处理
+     */
+    @RequestMapping("/noMapping")
+    public ReturnVo noMapping() {
+        ReturnVo returnVo = new ReturnVo();
+        returnVo.setMsg("您访问的页面找不到了。。。。");
+        returnVo.setSuccess(false);
+        return returnVo;
+    }
+
 }
