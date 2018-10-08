@@ -21,8 +21,8 @@ public class CriteriaUtil {
     /**
      * 设置参数实体所有字段为like查询
      *
-     * @param entity
-     * @return
+     * @param entity 待设置的实体
+     * @return 设置之后的Example对象
      */
     public static Example setFieldQueryLikeCondtion(Object entity) {
         Example example = getExample(entity);
@@ -57,17 +57,27 @@ public class CriteriaUtil {
      * 判断是否过滤某些字段
      * 过滤字段为带有Transient注解 和 static标识的字段
      *
-     * @param field
-     * @return
+     * @param field 待过滤的字段
+     * @return true/false
      */
     private static boolean filterQueryField(Field field) {
         return ((field.isAnnotationPresent(Transient.class)) || (Modifier.isStatic(field.getModifiers())));
     }
 
+    /**
+     * 根据Example对象获取Criteria对象
+     * @param example Example对象
+     * @return Criteria对象
+     */
     public static Example.Criteria getCriteria(Example example) {
         return example.createCriteria();
     }
 
+    /**
+     * 根据实体获取Example对象
+     * @param entity 实体类
+     * @return Example对象
+     */
     public static Example getExample(Object entity) {
         return new Example(entity.getClass());
     }

@@ -10,7 +10,7 @@ import java.io.StringWriter;
  * 日志打印工具类
  */
 public class LogUtil {
-    public static Logger log = Logger.getLogger(LogUtil.class);
+    private static Logger log = Logger.getLogger(LogUtil.class);
 
     /**
      * 不允许实例化
@@ -18,9 +18,10 @@ public class LogUtil {
     private LogUtil() {
     }
 
+    @SuppressWarnings(value = "unused")
     public static void warn(Object obj) {
         try {
-            String location = "";
+            String location;
             StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
             location = stacks[2].getClassName() + "." + stacks[2].getMethodName() + "(" + stacks[2].getLineNumber()
                     + ")";
@@ -41,7 +42,7 @@ public class LogUtil {
 
     public static void debug(Object obj) {
         try {
-            String location = "";
+            String location;
             StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
             location = stacks[2].getClassName() + "." + stacks[2].getMethodName() + "(" + stacks[2].getLineNumber()
                     + ")";
@@ -56,12 +57,13 @@ public class LogUtil {
             }
             log.debug(location + obj.toString());
         } catch (Exception localException1) {
+            localException1.printStackTrace();
         }
     }
 
     public static void info(Object obj) {
         try {
-            String location = "";
+            String location;
             StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
             location = stacks[2].getClassName() + "." + stacks[2].getMethodName() + "(" + stacks[2].getLineNumber()
                     + ")";
@@ -82,7 +84,7 @@ public class LogUtil {
 
     public static void error(Object obj) {
         try {
-            String location = "";
+            String location;
             StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
             location = stacks[2].getClassName() + "." + stacks[2].getMethodName() + "(" + stacks[2].getLineNumber()
                     + ")";
@@ -97,6 +99,7 @@ public class LogUtil {
             }
             log.error(location + obj.toString());
         } catch (Exception localException1) {
+            localException1.printStackTrace();
         }
     }
 }

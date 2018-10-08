@@ -143,7 +143,6 @@ public class RedisUtil {
 
     // 获取byte类型数据
     public byte[] getObject(byte[] key) {
-        System.out.println("lslsf列宽是否萨拉丁就分手了大家发牢骚");
         Jedis jedis = getJedis();
         byte[] bytes = null;
         if (jedis != null) {

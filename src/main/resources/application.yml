@@ -35,9 +35,12 @@ spring:
     protocol:
       name: dubbo
       port: 20880
-    # 接口所在的包
-    #scan:
-      #com.cxs
+  rabbitmq:
+    host: 172.26.1.53
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
 # pagehelper配置
 pagehelper:
   helperDialect: mysql

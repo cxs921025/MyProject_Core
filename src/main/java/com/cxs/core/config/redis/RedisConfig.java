@@ -40,7 +40,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         jedisPoolConfig.setMaxIdle(maxIdle);
         jedisPoolConfig.setMaxWaitMillis(maxWait);
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
-        LogUtil.info("JedisPool注入成功.");
+        LogUtil.info("[JedisPool]: 注入成功.");
         return jedisPool;
     }
 

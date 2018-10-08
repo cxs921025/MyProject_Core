@@ -17,9 +17,9 @@ public class EntityUtil {
     /**
      * 根据属性名获取实体属性值
      *
-     * @param entity
-     * @param fieldName
-     * @return
+     * @param entity 实体对象
+     * @param fieldName 实体对应的属性
+     * @return 实体属性的值
      */
     public static Object getValueWithField(Object entity, String fieldName) {
         MethodAccess methodAccess = MethodAccess.get(entity.getClass());
@@ -39,12 +39,11 @@ public class EntityUtil {
     /**
      * 根据属性名设置属性值
      *
-     * @param entity
-     * @param fieldName
-     * @param value
-     * @param <T>
+     * @param entity 实体对象
+     * @param fieldName 实体的属性
+     * @param value 待设置的值
      */
-    public static <T> void setValueWithField(Object entity, String fieldName, Object value) {
+    public static void setValueWithField(Object entity, String fieldName, Object value) {
         MethodAccess methodAccess = MethodAccess.get(entity.getClass());
         try {
             if (fieldName != null) {

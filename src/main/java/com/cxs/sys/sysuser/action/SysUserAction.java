@@ -1,6 +1,7 @@
 package com.cxs.sys.sysuser.action;
 
 import com.cxs.core.baseframework.action.BaseAction;
+import com.cxs.sys.sysuser.rabbitmq.SysUserSender;
 import com.cxs.core.exception.ServiceException;
 import com.cxs.core.utils.SessionUtil;
 import com.cxs.core.vo.ReturnVo;
@@ -18,13 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SysUserAction extends BaseAction<SysUserModel> {
 
+    private final SysUserService sysUserService;
+    private final SysUserSender sysUserSender;
+
     @Autowired
-    private SysUserService sysUserService;
+    public SysUserAction(SysUserService sysUserService, SysUserSender sysUserSender) {
+        this.sysUserService = sysUserService;
+        this.sysUserSender = sysUserSender;
+    }
 
     @RequestMapping("getUser")
     public ReturnVo getUser() {
         ReturnVo aj = new ReturnVo();
         try {
+            sysUserSender.getUserDelaySender("admin");
             //List<SysUserModel> userModels = sysUserService.getAll();
             //aj.setObj(userModels);
             //SysUserModel userModel = SysUserModel.builder().id("07c11b5adfb242e48922774e6aae3691").loginName("ddd").userName("测试").password("123456").build();

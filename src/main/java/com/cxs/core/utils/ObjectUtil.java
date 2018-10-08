@@ -1,15 +1,11 @@
 package com.cxs.core.utils;
 
-import org.springframework.core.convert.converter.Converter;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +14,6 @@ import java.util.List;
  * Object tool class
  */
 public class ObjectUtil {
-    public static final List<Converter<String, ? extends Object>> CONVERTERS = new ArrayList<Converter<String, ? extends Object>>();
 
     /**
      * 不允许实例化
@@ -29,9 +24,9 @@ public class ObjectUtil {
     /**
      * 根据注解类获取获取对象类中属性集合
      *
-     * @param clazz
-     * @param atClass
-     * @return
+     * @param clazz 实体类
+     * @param atClass 注解类
+     * @return 实体中带有参数注解类的所有字段集合
      */
     public static List<Field> getFieldsByAnnotation(Class<?> clazz, Class<? extends Annotation> atClass) {
         List list = getAllField(clazz);
@@ -87,10 +82,10 @@ public class ObjectUtil {
     }
 
     /**
-     * 获取类中所有public属性集合
+     * 获取类中所有属性集合
      *
-     * @param clazz
-     * @return
+     * @param clazz 实体类
+     * @return 所有属性集合
      */
     public static List<Field> getAllField(Class<?> clazz) {
         List list = new ArrayList();
@@ -148,19 +143,6 @@ public class ObjectUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static Converter<String, ? extends Object> getConverter(Class<? extends Object> type) {
-        for (Converter converter : CONVERTERS) {
-            ParameterizedType parameterizedType = (ParameterizedType) converter.getClass().getGenericInterfaces()[0];
-            Type[] params = parameterizedType.getActualTypeArguments();
-
-            Class _type = (Class) params[1];
-            if (isExtends(type, _type)) {
-                return converter;
-            }
-        }
-        return null;
     }
 
     private static List<Class<?>> getClassInterfaces(Class<?> clazz) {
