@@ -10,6 +10,7 @@ import com.cxs.core.baseframework.service.BaseService;
 public interface SysUserService extends BaseService<SysUserModel> {
     /**
      * 获取用户权限
+     *
      * @param username
      * @return
      */
@@ -17,6 +18,7 @@ public interface SysUserService extends BaseService<SysUserModel> {
 
     /**
      * 获取用户密码
+     *
      * @param username
      * @return
      */

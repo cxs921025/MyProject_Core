@@ -15,14 +15,13 @@ import java.io.Serializable;
  * 重写 shiro getSessionId 方法，解决前后端分离后session问题
  */
 public class SessionManager extends DefaultWebSessionManager {
-    private String authorization = "Authorization";
 
     /**
      * 重写获取sessionId的方法调用当前Manager的获取方法
      *
-     * @param request
-     * @param response
-     * @return
+     * @param request  请求信息
+     * @param response 返回信息
+     * @return Serializable
      */
     @Override
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
@@ -34,10 +33,11 @@ public class SessionManager extends DefaultWebSessionManager {
         if (id != null) {
             request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE, "cookie");
         } else {
-            id = this.getUriPathSegmentParamValue(request, "JSESSIONID");
+            id = this.getUriPathSegmentParamValue(request);
             if (id == null) {
                 // 获取请求头中的session
-                id = WebUtils.toHttp(request).getHeader(this.authorization);
+                String authorization = "Authorization";
+                id = WebUtils.toHttp(request).getHeader(authorization);
                 if (id == null) {
                     String name = this.getSessionIdName();
                     id = request.getParameter(name);
@@ -72,7 +72,7 @@ public class SessionManager extends DefaultWebSessionManager {
     }
 
     // copy super
-    private String getUriPathSegmentParamValue(ServletRequest servletRequest, String paramName) {
+    private String getUriPathSegmentParamValue(ServletRequest servletRequest) {
         if (!(servletRequest instanceof HttpServletRequest)) {
             return null;
         } else {
@@ -89,7 +89,7 @@ public class SessionManager extends DefaultWebSessionManager {
                 if (index < 0) {
                     return null;
                 } else {
-                    String TOKEN = paramName + "=";
+                    String TOKEN = "JSESSIONID" + "=";
                     uri = uri.substring(index + 1);
                     index = uri.lastIndexOf(TOKEN);
                     if (index < 0) {

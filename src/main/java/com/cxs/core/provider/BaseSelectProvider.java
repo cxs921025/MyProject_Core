@@ -13,13 +13,14 @@ import java.util.Set;
  * @author ChenXS
  * Dynamic SQL implementation.
  */
+@SuppressWarnings("unused")
 public class BaseSelectProvider extends MapperTemplate {
 
     public BaseSelectProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
         super(mapperClass, mapperHelper);
     }
 
-	public String selectByIds(MappedStatement ms) {
+    public String selectByIds(MappedStatement ms) {
         Class entityClass = getEntityClass(ms);
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();

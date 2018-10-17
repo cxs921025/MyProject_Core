@@ -1,5 +1,6 @@
 package com.cxs.core.builder;
 
+import com.cxs.core.utils.LogUtil;
 import com.cxs.core.utils.ObjectUtil;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.util.StringUtil;
@@ -22,6 +23,7 @@ import java.util.Set;
  * @param <T>
  * @author ChenXS
  */
+@SuppressWarnings("unchecked")
 public class SimpleSqlBuilder<T> {
     private String tableName;
     private String idField;
@@ -35,12 +37,12 @@ public class SimpleSqlBuilder<T> {
     /**
      * 初始化SimpleSqlBuilder
      *
-     * @param entityClass
+     * @param entityClass 实体类
      */
-	private void init(Class<T> entityClass) {
+    private void init(Class<T> entityClass) {
         this.entityClass = entityClass;
         if (entityClass.isAnnotationPresent(Table.class)) {
-            Table table = (Table) entityClass.getAnnotation(Table.class);
+            Table table = entityClass.getAnnotation(Table.class);
             if (!(table.name().equals(""))) {
                 this.tableName = table.name();
             }
@@ -62,13 +64,13 @@ public class SimpleSqlBuilder<T> {
             }
 
             if (field.isAnnotationPresent(Id.class)) {
-                Id id = (Id) field.getAnnotation(Id.class);
+                Id id = field.getAnnotation(Id.class);
                 if (id != null) {
                     setIdField(field.getName());
                 }
             }
-            Column column = (Column) field.getAnnotation(Column.class);
-            String name = "";
+            Column column = field.getAnnotation(Column.class);
+            String name;
             if (column != null) {
                 name = column.name();
             } else {
@@ -83,26 +85,25 @@ public class SimpleSqlBuilder<T> {
     /**
      * 获取实体中所有的数据库表字段以及对应值
      *
-     * @param entity
-     * @return
+     * @param entity 待操作实体
+     * @return map
      */
     public Map<String, Object> getAllSqlParameter(T entity) {
-        return getSqlParameters(entity, false);
+        return getSqlParameters(entity);
     }
 
     /**
      * 获取实体中所有的数据库表字段以及对应值
      *
-     * @param entity
-     * @param isMarker
-     * @return
+     * @param entity 待操作实体
+     * @return map
      */
-	private Map<String, Object> getSqlParameters(T entity, boolean isMarker) {
+    private Map<String, Object> getSqlParameters(T entity) {
         Map params = new HashMap();
         for (String field : this.fieldColumnMapping.keySet()) {
             try {
                 Object value = new PropertyDescriptor(
-                        field, this.entityClass).getReadMethod().invoke(entity, new Object[0]);
+                        field, this.entityClass).getReadMethod().invoke(entity);
                 if (value == null) {
                     params.put(field, null);
                     continue;
@@ -118,16 +119,16 @@ public class SimpleSqlBuilder<T> {
     /**
      * 获取JDBCTemplate所需的更新语句
      *
-     * @param batchArgs
-     * @return
+     * @param batchArgs batchArgs
+     * @return String
      */
-	public String getUpdateSql(Map<String, Object>[] batchArgs) {
+    public String getUpdateSql(Map<String, Object>[] batchArgs) {
         Map mapArgs = new HashMap();
         for (Map map : batchArgs) {
             for (Object entry : map.entrySet()) {
                 Map.Entry e = (Map.Entry) entry;
                 if (e.getValue() != null) {
-                    mapArgs.put((String) e.getKey(), e.getValue());
+                    mapArgs.put(e.getKey(), e.getValue());
                 }
             }
         }
@@ -137,9 +138,9 @@ public class SimpleSqlBuilder<T> {
     /**
      * 获取JDBCTemplate所需的更新语句
      *
-     * @param fieldSet
-     * @param mapArgs
-     * @return
+     * @param fieldSet fieldSet
+     * @param mapArgs  mapArgs
+     * @return String
      */
     public String getUpdateSql(Set<String> fieldSet, Map<String, Object> mapArgs) {
         StringBuilder sb = new StringBuilder();
@@ -149,43 +150,40 @@ public class SimpleSqlBuilder<T> {
                 continue;
             }
             for (Map.Entry entry : mapArgs.entrySet()) {
-                if (StringUtil.camelhumpToUnderline((String) entry.getKey())
-                        .equalsIgnoreCase((String) this.fieldColumnMapping.get(field))) {
-                    sb.append(" ").append((String) this.fieldColumnMapping.get(field)).append(" =:" + field + ",");
+                if (this.fieldColumnMapping.get(field).equalsIgnoreCase(StringUtil.camelhumpToUnderline((String) entry.getKey()))) {
+                    sb.append(" ").append(this.fieldColumnMapping.get(field)).append(" =:").append(field).append(",");
                 }
             }
         }
         sb.deleteCharAt(sb.length() - 1);
-        sb.append(" WHERE ").append((String) this.fieldColumnMapping.get(this.idField)).append(" =:").append(this.idField);
-        String sql = sb.toString();
-        return sql;
+        sb.append(" WHERE ").append(this.fieldColumnMapping.get(this.idField)).append(" =:").append(this.idField);
+        return sb.toString();
     }
 
     /**
      * 获取JDBCTemplate所需的删除语句
      *
-     * @param ids
-     * @return
+     * @param ids ids
+     * @return String
      */
     public String getDeleteSql(String[] ids) {
-        String condtion = getSqlByArray(ids, (String) this.fieldColumnMapping.get(this.idField));
-        String sql = "DELETE FROM " + this.tableName + " WHERE " + condtion;
-        return sql;
+        String condtion = getSqlByArray(ids, this.fieldColumnMapping.get(this.idField));
+        return "DELETE FROM " + this.tableName + " WHERE " + condtion;
     }
 
     /**
      * 根据数组获取sql语句
      *
-     * @param strArry
-     * @param columnName
-     * @return
+     * @param strArry    strArry
+     * @param columnName columnName
+     * @return String
      */
     public static String getSqlByArray(String[] strArry, String columnName) {
-        StringBuffer sql = new StringBuffer("");
+        StringBuilder sql = new StringBuilder();
         if (strArry != null) {
             sql.append(columnName).append(" IN ( ");
             for (int i = 0; i < strArry.length; ++i) {
-                sql.append("'").append(strArry[i] + "',");
+                sql.append("'").append(strArry[i]).append("',");
                 if (((i + 1) % 1000 == 0) && (i + 1 < strArry.length)) {
                     sql.deleteCharAt(sql.length() - 1);
                     sql.append(" ) OR ").append(columnName).append(" IN (");
@@ -197,8 +195,26 @@ public class SimpleSqlBuilder<T> {
         return sql.toString();
     }
 
-    public String getTableName() {
-        return this.tableName;
+    public String getIncludeIdFieldInsertSql() {
+        return getInsertSql(this.fieldColumnMapping.keySet());
+    }
+
+    private String getInsertSql(Set<String> fieldSet) {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        sb.append("INSERT INTO ").append(this.tableName).append("(");
+        for (String field : fieldSet) {
+            sb.append(this.fieldColumnMapping.get(field)).append(", ");
+            sb2.append(":").append(field).append(", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        sb2.delete(sb2.length() - 2, sb2.length());
+        sb.append(") VALUES(");
+        sb.append(sb2);
+        sb.append(")");
+        String sql = sb.toString();
+        LogUtil.info(sql);
+        return sql;
     }
 
     private void setTableName(String tableName) {
@@ -211,10 +227,6 @@ public class SimpleSqlBuilder<T> {
 
     private void setIdField(String idField) {
         this.idField = idField;
-    }
-
-    public Map<String, String> getFieldColumnMapping() {
-        return this.fieldColumnMapping;
     }
 
     private void setFieldColumnMapping(Map<String, String> fieldColumnMapping) {

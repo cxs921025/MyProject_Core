@@ -6,11 +6,11 @@ package com.cxs.core.exception;
  */
 public class ServiceException extends RuntimeException {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -9138621492432781587L;
+     * 序列化ID
+     */
+    private static final long serialVersionUID = -9138621492432781587L;
 
-	public ServiceException(String message) {
+    public ServiceException(String message) {
         super(message);
     }
 }

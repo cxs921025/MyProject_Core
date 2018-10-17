@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface BaseSelectMapper<T> {
     @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
-    public List<T> selectByIds(String ids);
+    List<T> selectByIds(String ids);
 }

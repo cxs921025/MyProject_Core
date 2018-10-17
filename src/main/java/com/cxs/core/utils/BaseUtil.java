@@ -26,7 +26,7 @@ public class BaseUtil {
      * 判断参数实体id是否为null
      *
      * @param entity 待判断实体
-     * @param <T> 实体类
+     * @param <T>    实体类
      * @return true/false
      */
     public static <T> boolean isIdNull(T entity) {
@@ -60,7 +60,7 @@ public class BaseUtil {
         return str.replace("-", "");
     }
 
-    public static synchronized String encryptionWithMd5(String str){
+    public static synchronized String encryptionWithMd5(String str) {
         MessageDigest md5;
         String newStr = str;
         try {
@@ -68,7 +68,7 @@ public class BaseUtil {
             md5 = MessageDigest.getInstance("MD5");
             BASE64Encoder base64en = new BASE64Encoder();
             //加密后的字符串
-            newStr=base64en.encode(md5.digest(str.getBytes(StandardCharsets.UTF_8)));
+            newStr = base64en.encode(md5.digest(str.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

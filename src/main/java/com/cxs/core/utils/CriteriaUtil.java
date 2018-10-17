@@ -34,7 +34,7 @@ public class CriteriaUtil {
                 continue;
             }
             Object fieldValue = EntityUtil.getValueWithField(entity, field.getName());
-            if (StringUtils.isBlank(fieldValue.toString())) {
+            if (fieldValue == null || StringUtils.isBlank(fieldValue.toString())) {
                 continue;
             }
             criteria.andLike(field.getName(), "%" + StringUtils.trim(fieldValue.toString()) + "%");
@@ -66,6 +66,7 @@ public class CriteriaUtil {
 
     /**
      * 根据Example对象获取Criteria对象
+     *
      * @param example Example对象
      * @return Criteria对象
      */
@@ -75,6 +76,7 @@ public class CriteriaUtil {
 
     /**
      * 根据实体获取Example对象
+     *
      * @param entity 实体类
      * @return Example对象
      */

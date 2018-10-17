@@ -7,12 +7,14 @@ import java.io.ObjectOutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author ChenXS
  * Object tool class
  */
+@SuppressWarnings({"unchecked", "unused", "MismatchedQueryAndUpdateOfCollection"})
 public class ObjectUtil {
 
     /**
@@ -24,25 +26,20 @@ public class ObjectUtil {
     /**
      * 根据注解类获取获取对象类中属性集合
      *
-     * @param clazz 实体类
+     * @param clazz   实体类
      * @param atClass 注解类
      * @return 实体中带有参数注解类的所有字段集合
      */
     public static List<Field> getFieldsByAnnotation(Class<?> clazz, Class<? extends Annotation> atClass) {
-        List list = getAllField(clazz);
-        List ret = new ArrayList();
-        for (Object field : list) {
-            ret.add((Field) field);
-        }
-        return list;
+        return getAllField(clazz);
     }
 
     /**
      * 判断两个类是否是继承关系
      *
-     * @param clazz
-     * @param superClass
-     * @return
+     * @param clazz      待判断的类
+     * @param superClass 超类
+     * @return true/false
      */
     public static boolean isExtends(Class<?> clazz, Class<?> superClass) {
         if (clazz == superClass) {
@@ -61,9 +58,9 @@ public class ObjectUtil {
     /**
      * 判断两个类是否是实现关系
      *
-     * @param clazz
-     * @param interfaceClass
-     * @return
+     * @param clazz          待判断的类
+     * @param interfaceClass 接口
+     * @return true/false
      */
     public static boolean isImplement(Class<?> clazz, Class<?> interfaceClass) {
         if (!(interfaceClass.isInterface())) {
@@ -88,10 +85,7 @@ public class ObjectUtil {
      * @return 所有属性集合
      */
     public static List<Field> getAllField(Class<?> clazz) {
-        List list = new ArrayList();
-        for (Field field : clazz.getDeclaredFields()) {
-            list.add(field);
-        }
+        List list = new ArrayList(Arrays.asList(clazz.getDeclaredFields()));
         Class _clazz = clazz.getSuperclass();
         while (_clazz != null) {
             list.addAll(getAllField(_clazz));
@@ -103,22 +97,18 @@ public class ObjectUtil {
     /**
      * 获取类中所有属性集合
      *
-     * @param clazz
-     * @return
+     * @param clazz 待操作的类
+     * @return 所有属性集合
      */
     public static List<Field> getAllDeclareFields(Class<?> clazz) {
-        List list = new ArrayList();
-        for (Field field : clazz.getDeclaredFields()) {
-            list.add(field);
-        }
-        return list;
+        return new ArrayList(Arrays.asList(clazz.getDeclaredFields()));
     }
 
     /**
      * 将一个对象序列化为字节数组
      *
-     * @param obj
-     * @return
+     * @param obj 待序列化的对象
+     * @return 序列化结果
      */
     public static byte[] serialize(Object obj) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -134,7 +124,7 @@ public class ObjectUtil {
     }
 
     public static Object unSerialize(byte[] bytes) {
-        Object obj = null;
+        Object obj;
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
         try {
             ObjectInputStream ois = new ObjectInputStream(bais);

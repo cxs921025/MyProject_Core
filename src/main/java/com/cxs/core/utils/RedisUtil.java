@@ -12,6 +12,7 @@ import java.util.Set;
  * @author ChenXS
  * redis工具类
  */
+@SuppressWarnings({"unchecked", "unused"})
 @Component
 public class RedisUtil {
 
@@ -155,7 +156,6 @@ public class RedisUtil {
             }
         }
         return bytes;
-
     }
 
     // 更新byte类型的数据，主要更新过期时间

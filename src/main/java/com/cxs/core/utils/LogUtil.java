@@ -9,6 +9,7 @@ import java.io.StringWriter;
  * @author ChenXS
  * 日志打印工具类
  */
+@SuppressWarnings({"unchecked", "unused"})
 public class LogUtil {
     private static Logger log = Logger.getLogger(LogUtil.class);
 
@@ -18,7 +19,6 @@ public class LogUtil {
     private LogUtil() {
     }
 
-    @SuppressWarnings(value = "unused")
     public static void warn(Object obj) {
         try {
             String location;

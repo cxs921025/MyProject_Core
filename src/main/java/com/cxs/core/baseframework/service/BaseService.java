@@ -12,6 +12,7 @@ import java.util.Set;
  * The superclass of the service class, which provides some basic data operations
  * .e.g: select, save, update, delete
  */
+@SuppressWarnings("unused")
 public interface BaseService<T> {
     /**
      * 根据参数实体中提供的条件查询数据库中对应的一条数据
@@ -124,10 +125,9 @@ public interface BaseService<T> {
      * 将参数实体集合持久化到数据库中
      *
      * @param entitys 待保存实体集合
-     * @return 操作影响数据库的行数 -1为保存出错
      * @throws ServiceException 执行出错时抛出异常信息
      */
-    int saveInBatch(List<T> entitys) throws ServiceException;
+    void saveInBatch(List<T> entitys) throws ServiceException;
 
     /**
      * 更新数据库中参数实体对应id的数据
@@ -152,10 +152,10 @@ public interface BaseService<T> {
      * 若没有则保存
      *
      * @param entity 待保存或更新实体
-     * @return 操作影响数据库的行数
+     * @return 数据id
      * @throws ServiceException 执行出错时抛出异常信息
      */
-    int saveOrUpdate(T entity) throws ServiceException;
+    String saveOrUpdate(T entity) throws ServiceException;
 
     /**
      * 批量更新或保存数据库中数据
@@ -180,7 +180,7 @@ public interface BaseService<T> {
     /**
      * 根据id 删除数据库中数据
      *
-     * @param id
+     * @param id 待删除的数据ID
      * @return 操作影响数据库的行数 -1位删除出错
      * @throws ServiceException 执行出错时抛出异常信息
      */

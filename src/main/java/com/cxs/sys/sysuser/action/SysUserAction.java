@@ -33,6 +33,7 @@ public class SysUserAction extends BaseAction<SysUserModel> {
         ReturnVo aj = new ReturnVo();
         try {
             sysUserSender.getUserDelaySender("admin");
+            //SysUserModel build = SysUserModel.builder().loginName("admin").password(BaseUtil.encryptionWithMd5("12345")).userName("管理员").build();
             //List<SysUserModel> userModels = sysUserService.getAll();
             //aj.setObj(userModels);
             //SysUserModel userModel = SysUserModel.builder().id("07c11b5adfb242e48922774e6aae3691").loginName("ddd").userName("测试").password("123456").build();

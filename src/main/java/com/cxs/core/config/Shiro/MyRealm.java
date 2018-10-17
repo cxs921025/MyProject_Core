@@ -49,7 +49,7 @@ public class MyRealm extends AuthorizingRealm {
     /**
      * 获取授权信息
      *
-     * @param  principalCollection principalCollection
+     * @param principalCollection principalCollection
      * @return AuthorizationInfo
      */
     @Override

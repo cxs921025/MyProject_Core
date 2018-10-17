@@ -8,6 +8,7 @@ import java.util.Map;
  * @author ChenXS
  * 规范化ajax返回格式
  */
+@SuppressWarnings("unused")
 public class ReturnVo {
     private boolean success = true;
     private String msg = "操作成功";
@@ -48,7 +49,7 @@ public class ReturnVo {
 
     public String getJsonStr() {
         JSONObject obj = new JSONObject();
-        obj.put("success", Boolean.valueOf(isSuccess()));
+        obj.put("success", isSuccess());
         obj.put("msg", getMsg());
         obj.put("obj", this.obj);
         obj.put("attributes", this.attributes);

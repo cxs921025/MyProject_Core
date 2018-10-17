@@ -26,8 +26,13 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class MyBatisConfig implements TransactionManagementConfigurer {
 
-    @Autowired
+    final
     DataSource dataSource;
+
+    @Autowired
+    public MyBatisConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactoryBean() {
