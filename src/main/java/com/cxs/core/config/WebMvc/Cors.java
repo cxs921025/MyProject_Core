@@ -1,6 +1,6 @@
 package com.cxs.core.config.WebMvc;
 
-import com.cxs.core.utils.PropertiesUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.stereotype.Component;
 
@@ -8,20 +8,15 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 @Component
 @ServletComponentScan
 @WebFilter(urlPatterns = "/*", filterName = "cors")
 public class Cors implements Filter {
-    Properties properties = null;
 
     @Override
     public void init(FilterConfig config) {
-        // 读取配置文件内容
-        properties = PropertiesUtil.getPropertiesContext("config" + File.separator + "cors.properties");
     }
 
     @Override
@@ -32,9 +27,25 @@ public class Cors implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        for (Object key : properties.keySet()) {
-            response.setHeader(key.toString(), properties.getProperty(key.toString()));
+
+        // 允许任何域名访问
+        String origin = request.getHeader("Origin");
+        if(StringUtils.isNotBlank(origin)){
+            response.setHeader("Access-Control-Allow-Origin", origin);
         }
+        // 允许请求所携带的任何自定义请求头信息
+        String headers = request.getHeader("Access-Control-Request-Headers");
+        if(StringUtils.isNotEmpty(headers)){
+            response.setHeader("Access-Control-Allow-Headers", headers);
+        }
+        // 允许浏览器携带用户身份信息（cookie）
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        // 允许浏览器缓存预检命令的时间，单位是秒
+        response.setHeader("Access-Control-Max-Age", "1800");
+        // 允许请求的方法
+        response.setHeader("Access-Control-Allow-Methods", "*");
+
+        // 如果是预检命令，直接返回正确状态
         if (request.getMethod().equals("OPTIONS")) {
             response.setStatus(200);
             return;
