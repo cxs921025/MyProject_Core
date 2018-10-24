@@ -1,4 +1,4 @@
-package com.cxs.core.config.Shiro;
+package com.cxs.core.config.shiro;
 
 import com.cxs.core.utils.LogUtil;
 import com.cxs.sys.sysuser.model.SysUserModel;

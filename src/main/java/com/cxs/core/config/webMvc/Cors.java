@@ -1,4 +1,4 @@
-package com.cxs.core.config.WebMvc;
+package com.cxs.core.config.webMvc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.ServletComponentScan;

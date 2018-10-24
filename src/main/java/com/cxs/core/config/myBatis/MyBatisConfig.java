@@ -1,4 +1,4 @@
-package com.cxs.core.config.MyBatis;
+package com.cxs.core.config.myBatis;
 
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;

@@ -41,6 +41,10 @@ spring:
     username: admin
     password: admin
     virtual-host: /
+    # 开启发送后回调
+    publisher-confirms: true
+    publisher-returns: true
+
 # pagehelper配置
 pagehelper:
   helperDialect: mysql

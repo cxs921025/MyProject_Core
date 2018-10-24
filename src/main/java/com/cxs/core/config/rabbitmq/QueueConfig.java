@@ -1,4 +1,4 @@
-package com.cxs.core.config.Rabbitmq;
+package com.cxs.core.config.rabbitmq;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

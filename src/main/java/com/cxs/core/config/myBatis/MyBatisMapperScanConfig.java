@@ -1,4 +1,4 @@
-package com.cxs.core.config.MyBatis;
+package com.cxs.core.config.myBatis;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
