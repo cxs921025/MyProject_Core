@@ -2,29 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cxs.sys.sysuser.dao.SysUserMapper">
 
-    <select id="getUserModelWithBlurry" parameterType="java.lang.String" resultType="com.cxs.sys.sysuser.model.SysUserModel">
+    <select id="getUserModelWithBlurry" parameterType="java.lang.String"
+            resultType="com.cxs.sys.sysuser.model.SysUserModel">
         SELECT
-            *
+        *
         FROM
-            SYS_USER
+        SYS_USER
         WHERE
-            LOGIN_NAME = #{loginName}
-        OR  PHONE = #{loginName}
-        OR  EMAIL = #{loginName}
+        LOGIN_NAME = #{loginName}
+        OR PHONE = #{loginName}
+        OR EMAIL = #{loginName}
     </select>
 
     <select id="getRole" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT
-            SR.CODE
+        SR.CODE
         FROM
-            SYS_ROLE SR
+        SYS_ROLE SR
         LEFT JOIN
-            SYS_USER SU
+        SYS_USER SU
         ON
-            SR.ID = SU.ROLE_ID
+        SR.ID = SU.ROLE_ID
         WHERE
-            SU.LOGIN_NAME = #{loginName}
-        OR  SU.PHONE = #{loginName}
-        OR  SU.EMAIL = #{loginName}
+        SU.LOGIN_NAME = #{loginName}
+        OR SU.PHONE = #{loginName}
+        OR SU.EMAIL = #{loginName}
     </select>
 </mapper>

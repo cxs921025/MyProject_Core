@@ -30,12 +30,12 @@ public class Cors implements Filter {
 
         // 允许任何域名访问
         String origin = request.getHeader("Origin");
-        if(StringUtils.isNotBlank(origin)){
+        if (StringUtils.isNotBlank(origin)) {
             response.setHeader("Access-Control-Allow-Origin", origin);
         }
         // 允许请求所携带的任何自定义请求头信息
         String headers = request.getHeader("Access-Control-Request-Headers");
-        if(StringUtils.isNotEmpty(headers)){
+        if (StringUtils.isNotEmpty(headers)) {
             response.setHeader("Access-Control-Allow-Headers", headers);
         }
         // 允许浏览器携带用户身份信息（cookie）

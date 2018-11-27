@@ -26,8 +26,8 @@ spring:
         max-wait: 10000
   dubbo:
     #application:
-      # dubbo提供者的别名，只是个标识
-      #name: coreService
+    # dubbo提供者的别名，只是个标识
+    #name: coreService
     # zk地址
     registry:
       address: 172.26.1.53:2181
