@@ -210,6 +210,28 @@ public class RedisUtil {
         return null;
     }
 
+
+    /**
+     * 获取过期时间
+     *
+     * @param key 关键字
+     * @return 剩余时间
+     */
+    public long getExpireTime(String key) {
+        Jedis jedis = getJedis();
+        long time = 0;
+        if (jedis != null) {
+            try {
+                time = jedis.ttl(key);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                recycleJedis(jedis);
+            }
+        }
+        return time;
+    }
+
     /**
      * 将Object对象转换为byte数组
      *

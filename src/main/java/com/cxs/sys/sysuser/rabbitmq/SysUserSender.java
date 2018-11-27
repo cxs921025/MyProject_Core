@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@SuppressWarnings({"unused", "unchecked"})
 public class SysUserSender {
     private final RabbitTemplate rabbitTemplate;
 
