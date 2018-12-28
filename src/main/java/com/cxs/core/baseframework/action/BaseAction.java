@@ -31,8 +31,7 @@ public class BaseAction<T> extends WebApplicationObjectSupport {
         bean = bean.substring(0, bean.lastIndexOf("Action")).concat("Service");
         WebApplicationContext webApplicationContext = getWebApplicationContext();
         assert webApplicationContext != null;
-        BaseService baseService = (BaseService) webApplicationContext.getBean(bean);
-        return baseService;
+        return (BaseService) webApplicationContext.getBean(bean);
     }
 
     /**
