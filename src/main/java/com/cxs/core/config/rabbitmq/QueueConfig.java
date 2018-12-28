@@ -16,6 +16,9 @@ import java.util.Map;
 @AutoConfigureAfter(RabbitmqConfig.class)
 public class QueueConfig {
 
+    private static final String GET_USER_QUEUE = "getUser";
+    private static final String QUEUE_DELAY = "_delay";
+
     //路由
     private final DirectExchange directExchange;
 
@@ -27,12 +30,12 @@ public class QueueConfig {
     @Bean
     public Queue getUser() {
         // durable 是否持久化到本地磁盘
-        return new Queue("getUser", true);
+        return new Queue(GET_USER_QUEUE, true);
     }
 
     @Bean
     public Binding signNotifyRcQueueDataBinding(Queue getUser) {
-        return BindingBuilder.bind(getUser).to(directExchange).with("getUser");
+        return BindingBuilder.bind(getUser).to(directExchange).with(GET_USER_QUEUE);
     }
 
     @Bean
@@ -43,8 +46,8 @@ public class QueueConfig {
         // 绑定路由
         arguments.put("x-dead-letter-exchange", directExchange.getName());
         // 转发队列
-        arguments.put("x-dead-letter-routing-key", "getUser");
-        return new Queue("getUser_delay", true, false, false, arguments);
+        arguments.put("x-dead-letter-routing-key", GET_USER_QUEUE);
+        return new Queue(GET_USER_QUEUE + QUEUE_DELAY, true, false, false, arguments);
     }
 
     @Bean

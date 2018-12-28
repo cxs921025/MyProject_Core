@@ -29,9 +29,7 @@ public class SysUserSender {
 
     public void getUserSender(String loginName) {
         rabbitTemplate.setConfirmCallback(confirmCallback);
-        // 测试 消息发送失败
-        //rabbitTemplate.convertAndSend("no_had_exchange","getUser11", loginName);
-        rabbitTemplate.convertAndSend("getUser11", loginName);
+        rabbitTemplate.convertAndSend("getUser", loginName);
     }
 
     public void getUserDelaySender(String loginName) {

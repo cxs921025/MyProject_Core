@@ -36,7 +36,7 @@ public class LogUtil {
             }
             log.warn(location + obj.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -57,7 +57,7 @@ public class LogUtil {
             }
             log.debug(location + obj.toString());
         } catch (Exception localException1) {
-            localException1.printStackTrace();
+            log.error(localException1);
         }
     }
 
@@ -78,7 +78,7 @@ public class LogUtil {
             }
             log.info(location + obj.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -99,7 +99,7 @@ public class LogUtil {
             }
             log.error(location + obj.toString());
         } catch (Exception localException1) {
-            localException1.printStackTrace();
+            log.error(localException1);
         }
     }
 }

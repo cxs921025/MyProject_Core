@@ -1,5 +1,6 @@
 package com.cxs;
 
+import com.cxs.core.utils.LogUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
@@ -10,6 +11,6 @@ public class CoreApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
-        System.out.println("程序启动成功！ \\^0^/ ");
+        LogUtil.debug("程序启动成功！ \\^0^/ ");
     }
 }

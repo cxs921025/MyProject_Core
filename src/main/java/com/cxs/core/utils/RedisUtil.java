@@ -6,6 +6,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -32,7 +33,7 @@ public class RedisUtil {
         try {
             jedis = jedisPool.getResource();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return jedis;
     }
@@ -43,7 +44,7 @@ public class RedisUtil {
             try {
                 jedis.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             }
         }
     }
@@ -55,7 +56,7 @@ public class RedisUtil {
             try {
                 jedis.set(key, value);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -69,7 +70,7 @@ public class RedisUtil {
             try {
                 jedis.setex(key, expireTime, value);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -84,7 +85,7 @@ public class RedisUtil {
             try {
                 result = jedis.get(key);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -99,7 +100,7 @@ public class RedisUtil {
             try {
                 jedis.del(key);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -117,7 +118,7 @@ public class RedisUtil {
                 // redis中session过期时间
                 jedis.expire(key, expireTime);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -135,7 +136,7 @@ public class RedisUtil {
                 // redis中session过期时间
                 jedis.expire(key, expireTime);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -150,7 +151,7 @@ public class RedisUtil {
             try {
                 bytes = jedis.get(key);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -166,7 +167,7 @@ public class RedisUtil {
                 // redis中session过期时间
                 jedis.expire(key, expireTime);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -188,7 +189,7 @@ public class RedisUtil {
                     jedis.incr(key);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -202,14 +203,13 @@ public class RedisUtil {
             try {
                 return jedis.keys(pattern);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
         }
-        return null;
+        return new HashSet<>();
     }
-
 
     /**
      * 获取过期时间
@@ -224,7 +224,7 @@ public class RedisUtil {
             try {
                 time = jedis.ttl(key);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtil.error(e);
             } finally {
                 recycleJedis(jedis);
             }
@@ -246,7 +246,7 @@ public class RedisUtil {
             objectStream.writeObject(object);
             bytes = byteArrayStream.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return bytes;
     }
@@ -264,7 +264,7 @@ public class RedisUtil {
             ObjectInputStream objectStream = new ObjectInputStream(byteArrayStream);
             object = objectStream.readObject();
         } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return object;
     }

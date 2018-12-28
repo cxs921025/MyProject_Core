@@ -30,22 +30,16 @@ public class CriteriaUtil {
         Field[] fileds = entity.getClass().getDeclaredFields();
         Field[] superFields = entity.getClass().getSuperclass().getDeclaredFields();
         for (Field field : superFields) {
-            if (filterQueryField(field)) {
-                continue;
-            }
             Object fieldValue = EntityUtil.getValueWithField(entity, field.getName());
-            if (fieldValue == null || StringUtils.isBlank(fieldValue.toString())) {
+            if (filterQueryField(field) || (fieldValue == null || StringUtils.isBlank(fieldValue.toString()))) {
                 continue;
             }
             criteria.andLike(field.getName(), "%" + StringUtils.trim(fieldValue.toString()) + "%");
         }
         for (Field field : fileds) {
-            if (filterQueryField(field)) {
-                continue;
-            }
             Object fieldValue = EntityUtil.getValueWithField(entity, field.getName());
             fieldValue = fieldValue == null ? "" : fieldValue;
-            if (StringUtils.isBlank(fieldValue.toString())) {
+            if (filterQueryField(field) || StringUtils.isBlank(fieldValue.toString())) {
                 continue;
             }
             criteria.andLike(field.getName(), "%" + StringUtils.trim(fieldValue.toString()) + "%");

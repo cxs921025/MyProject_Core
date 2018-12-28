@@ -2,7 +2,6 @@ package com.cxs.core.baseframework.action;
 
 import com.cxs.core.baseframework.service.BaseService;
 import com.cxs.core.exception.ServiceException;
-import com.cxs.core.utils.ApplicationContextUtil;
 import com.cxs.core.utils.JsonUtil;
 import com.cxs.core.utils.LogUtil;
 import com.cxs.core.vo.ReturnVo;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationObjectSupport;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -22,13 +23,16 @@ import java.util.Map;
  * @author ChenXS The superclass of the controller
  */
 @SuppressWarnings("unchecked")
-public class BaseAction<T> {
+public class BaseAction<T> extends WebApplicationObjectSupport {
 
     public BaseService getServer() {
         String className = super.getClass().getSimpleName();
         String bean = String.valueOf(Character.toLowerCase(className.charAt(0))) + className.substring(1);
         bean = bean.substring(0, bean.lastIndexOf("Action")).concat("Service");
-        return (BaseService) ApplicationContextUtil.getBean(bean);
+        WebApplicationContext webApplicationContext = getWebApplicationContext();
+        assert webApplicationContext != null;
+        BaseService baseService = (BaseService) webApplicationContext.getBean(bean);
+        return baseService;
     }
 
     /**
@@ -64,7 +68,6 @@ public class BaseAction<T> {
         return returnVo;
     }
 
-
     /**
      * 精确获取数据
      *
@@ -87,7 +90,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -112,7 +115,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -139,7 +142,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -163,7 +166,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -190,7 +193,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -214,7 +217,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -241,7 +244,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -265,7 +268,7 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
@@ -289,14 +292,13 @@ public class BaseAction<T> {
         } catch (Exception e) {
             returnVo.setSuccess(false);
             returnVo.setMsg("系统异常");
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return returnVo;
     }
 
     public String getJspPagePath() {
-        RequestMapping RequestMapping = super.getClass()
-                .getAnnotation(org.springframework.web.bind.annotation.RequestMapping.class);
-        return RequestMapping.value()[0];
+        RequestMapping requestMapping = super.getClass().getAnnotation(org.springframework.web.bind.annotation.RequestMapping.class);
+        return requestMapping.value()[0];
     }
 }

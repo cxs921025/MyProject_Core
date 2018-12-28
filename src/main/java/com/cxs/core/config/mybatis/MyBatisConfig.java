@@ -1,5 +1,7 @@
-package com.cxs.core.config.myBatis;
+package com.cxs.core.config.mybatis;
 
+import com.cxs.core.exception.ServiceException;
+import com.cxs.core.utils.LogUtil;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -58,8 +60,8 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
             bean.setMapperLocations(resolver.getResources("classpath:/mapper/*/*.xml"));
             return bean.getObject();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            LogUtil.error(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 

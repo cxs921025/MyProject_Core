@@ -7,6 +7,8 @@ import java.util.List;
 @SuppressWarnings({"unchecked", "unused"})
 public class JsonUtil {
 
+    private JsonUtil(){}
+
     public static String toJsonString(List<Object> list) {
         return JSONObject.toJSONString(list);
     }

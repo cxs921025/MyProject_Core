@@ -66,7 +66,6 @@ public class SysLoginAction {
             returnVo.setMsg(e.getMessage());
         }
         //根据权限，指定返回数据
-        //String role = sysUserService.getRole(userModel.getLoginName());
         LogUtil.info("[登录]: 成功");
         return returnVo;
     }

@@ -30,7 +30,7 @@ public class PropertiesUtil {
             inputStream = new FileInputStream(PropertiesUtil.class.getResource("/").getPath() + path);
             properties.load(inputStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
         return properties;
     }

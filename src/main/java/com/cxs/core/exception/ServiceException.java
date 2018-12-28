@@ -4,6 +4,7 @@ package com.cxs.core.exception;
  * @author ChenXS
  * Service class custom exception information
  */
+@SuppressWarnings("all")
 public class ServiceException extends RuntimeException {
     /**
      * 序列化ID
@@ -12,5 +13,13 @@ public class ServiceException extends RuntimeException {
 
     public ServiceException(String message) {
         super(message);
+    }
+
+    public ServiceException(Exception e) {
+        super(e);
+    }
+
+    public ServiceException(String massage,Exception e) {
+        super(massage, e);
     }
 }

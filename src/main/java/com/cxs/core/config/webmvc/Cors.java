@@ -1,4 +1,4 @@
-package com.cxs.core.config.webMvc;
+package com.cxs.core.config.webmvc;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -16,11 +16,13 @@ import java.io.IOException;
 public class Cors implements Filter {
 
     @Override
-    public void init(FilterConfig config) {
+    public void destroy() {
+        // Do nothing
     }
 
     @Override
-    public void destroy() {
+    public void init(FilterConfig filterConfig) {
+        // Do nothing
     }
 
     @Override

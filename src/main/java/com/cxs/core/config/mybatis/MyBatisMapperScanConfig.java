@@ -1,4 +1,4 @@
-package com.cxs.core.config.myBatis;
+package com.cxs.core.config.mybatis;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,6 @@ public class MyBatisMapperScanConfig {
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
         mapperScannerConfigurer.setBasePackage("com.cxs.*.*.dao");
         Properties properties = new Properties();
-        //properties.setProperty("mappers", "tk.mybatis.mapper.common.Mapper");
         properties.setProperty("mappers", "com.cxs.core.baseframework.mapper.BaseMapper");
         properties.setProperty("notEmpty", "false");
         properties.setProperty("IDENTITY", "MYSQL");

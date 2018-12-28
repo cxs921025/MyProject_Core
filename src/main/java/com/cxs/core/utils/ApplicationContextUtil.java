@@ -1,6 +1,5 @@
 package com.cxs.core.utils;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -8,11 +7,11 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings({"unchecked", "unused"})
 @Component
 public class ApplicationContextUtil implements ApplicationContextAware {
-    private static ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ApplicationContextUtil.applicationContext = applicationContext;
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     /**
@@ -21,7 +20,7 @@ public class ApplicationContextUtil implements ApplicationContextAware {
      * @param name 类名
      * @return Bean
      */
-    public static Object getBean(String name) {
+    public Object getBean(String name) {
         return applicationContext.getBean(name);
     }
 
@@ -32,7 +31,7 @@ public class ApplicationContextUtil implements ApplicationContextAware {
      * @param <T>   T
      * @return Bean
      */
-    public static <T> T getBean(Class<T> clazz) {
+    public <T> T getBean(Class<T> clazz) {
         return applicationContext.getBean(clazz);
     }
 
@@ -44,7 +43,7 @@ public class ApplicationContextUtil implements ApplicationContextAware {
      * @param <T>   T
      * @return Bean
      */
-    public static <T> T getBean(String name, Class<T> clazz) {
+    public <T> T getBean(String name, Class<T> clazz) {
         return applicationContext.getBean(name, clazz);
     }
 }

@@ -1,10 +1,11 @@
 package com.cxs.core.utils;
 
+import com.cxs.core.exception.ServiceException;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,10 +28,9 @@ public class ObjectUtil {
      * 根据注解类获取获取对象类中属性集合
      *
      * @param clazz   实体类
-     * @param atClass 注解类
      * @return 实体中带有参数注解类的所有字段集合
      */
-    public static List<Field> getFieldsByAnnotation(Class<?> clazz, Class<? extends Annotation> atClass) {
+    public static List<Field> getFieldsByAnnotation(Class<?> clazz) {
         return getAllField(clazz);
     }
 
@@ -45,12 +45,12 @@ public class ObjectUtil {
         if (clazz == superClass) {
             return true;
         }
-        Class _class = clazz.getSuperclass();
-        while (_class != null) {
-            if (_class == superClass) {
+        Class cls = clazz.getSuperclass();
+        while (cls != null) {
+            if (cls == superClass) {
                 return true;
             }
-            _class = _class.getSuperclass();
+            cls = cls.getSuperclass();
         }
         return false;
     }
@@ -86,10 +86,10 @@ public class ObjectUtil {
      */
     public static List<Field> getAllField(Class<?> clazz) {
         List list = new ArrayList(Arrays.asList(clazz.getDeclaredFields()));
-        Class _clazz = clazz.getSuperclass();
-        while (_clazz != null) {
-            list.addAll(getAllField(_clazz));
-            _clazz = _clazz.getSuperclass();
+        Class cls = clazz.getSuperclass();
+        while (cls != null) {
+            list.addAll(getAllField(cls));
+            cls = cls.getSuperclass();
         }
         return list;
     }
@@ -119,7 +119,7 @@ public class ObjectUtil {
             oos.close();
             return baos.toByteArray();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -131,7 +131,7 @@ public class ObjectUtil {
             obj = ois.readObject();
             return obj;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 

@@ -65,7 +65,7 @@ public class SqlMapper<T> implements InitializingBean {
             this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(Objects.requireNonNull(this.jdbcTemplate.getDataSource()));
             this.namedParameterJdbcTemplate.batchUpdate(this.simpleSqlBuilder.getUpdateSql(batchArgs), batchArgs);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
     }
 
@@ -118,7 +118,7 @@ public class SqlMapper<T> implements InitializingBean {
         try {
             this.jdbcTemplate.execute(this.simpleSqlBuilder.getDeleteSql(ids));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
     }
 

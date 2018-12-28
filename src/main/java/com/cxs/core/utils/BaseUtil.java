@@ -1,11 +1,9 @@
 package com.cxs.core.utils;
 
 import com.esotericsoftware.reflectasm.MethodAccess;
-import sun.misc.BASE64Encoder;
 
 import javax.persistence.Id;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -40,7 +38,7 @@ public class BaseUtil {
                 String fs = field.getName();
                 int nameIndex = methodAccess.getIndex("get" + String.valueOf(fs.charAt(0)).toUpperCase() + fs.substring(1));
                 Object value = methodAccess.invoke(entity, nameIndex);
-                if ((value == null) || ("".equals(value)) || (value == new Integer(0))) {
+                if ((value == null) || ("".equals(value)) || (value == Integer.valueOf(0))) {
                     isNull = true;
                     break;
                 }
@@ -61,17 +59,26 @@ public class BaseUtil {
     }
 
     public static synchronized String encryptionWithMd5(String str) {
-        MessageDigest md5;
-        String newStr = str;
         try {
-            //确定计算方法
-            md5 = MessageDigest.getInstance("MD5");
-            BASE64Encoder base64en = new BASE64Encoder();
-            //加密后的字符串
-            newStr = base64en.encode(md5.digest(str.getBytes(StandardCharsets.UTF_8)));
+            MessageDigest md5 = MessageDigest.getInstance("md5");
+            //把密码转换为byte类型
+            byte[] b = str.getBytes();
+            //加密
+            byte[] digest = md5.digest(b);
+            //16进制的字符
+            char[] c = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+            //用于储存加密后的字符串
+            StringBuilder sb = new StringBuilder();
+            //处理为16进制的字符串
+            for (byte bb : digest) {
+                //15的8进制是0000,1111
+                sb.append(c[(bb >> 4) & 15]);
+                sb.append(c[bb & 15]);
+            }
+            return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LogUtil.error(e);
         }
-        return newStr;
+        return null;
     }
 }

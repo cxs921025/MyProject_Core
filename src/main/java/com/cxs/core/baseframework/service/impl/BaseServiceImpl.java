@@ -25,12 +25,14 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
+    private static final String NULL_ERROR_MSG = "错误信息：参数为null";
+
     @Autowired
     private BaseMapper<T> mapper;
 
     @Override
-    public T get(T query) throws ServiceException {
-        Assert.notNull(query, "错误信息：参数为null");
+    public T get(T query) {
+        Assert.notNull(query, NULL_ERROR_MSG);
         try {
             return this.mapper.selectOne(query);
         } catch (TooManyResultsException e) {
@@ -41,7 +43,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public T getById(String id) throws ServiceException {
+    public T getById(String id) {
         if (StringUtils.isBlank(id))
             throw new ServiceException("查询出错：Id为空");
         try {
@@ -54,29 +56,29 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public List<T> getListByConditionWithExact(T query) throws ServiceException {
-        Assert.notNull(query, "出错信息：参数为null");
+    public List<T> getListByConditionWithExact(T query) {
+        Assert.notNull(query, NULL_ERROR_MSG);
         try {
             return this.mapper.select(query);
         } catch (RuntimeException e) {
-            throw new ServiceException("数据查询出错：" + e);
+            throw new ServiceException("精确查询数据出错：" + e);
         }
     }
 
     @Override
-    public List<T> getListByConditionWithBlurry(T query) throws ServiceException {
-        Assert.notNull(query, "出错信息：参数为null");
+    public List<T> getListByConditionWithBlurry(T query) {
+        Assert.notNull(query, NULL_ERROR_MSG);
         try {
             Example e = CriteriaUtil.setFieldQueryLikeCondtion(query);
             return this.mapper.selectByExample(e);
         } catch (RuntimeException e) {
-            throw new ServiceException("数据查询出错：" + e);
+            throw new ServiceException("模糊查询数据出错：" + e);
         }
     }
 
     @Override
-    public List<T> getListByExample(Example example) throws ServiceException {
-        Assert.notNull(example, "出错信息：参数为null");
+    public List<T> getListByExample(Example example) {
+        Assert.notNull(example, NULL_ERROR_MSG);
         try {
             return this.mapper.selectByExample(example);
         } catch (RuntimeException e) {
@@ -85,53 +87,53 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public List<T> getByIds(String ids) throws ServiceException {
+    public List<T> getByIds(String ids) {
         if (StringUtils.isBlank(ids))
             return new ArrayList<>();
         try {
             String newIds = formatMapperIds(Arrays.asList(ids.split(",")));
             return this.mapper.selectByIds(newIds.substring(0, newIds.length() - 1));
         } catch (RuntimeException e) {
-            throw new ServiceException("数据查询出错：" + e);
+            throw new ServiceException("<String>根据Id查询出错：" + e);
         }
     }
 
     @Override
-    public List<T> getByIds(List<String> ids) throws ServiceException {
+    public List<T> getByIds(List<String> ids) {
         if (CollectionUtils.isEmpty(ids))
             return new ArrayList<>();
         try {
             String newIds = formatMapperIds(ids);
             return this.mapper.selectByIds(newIds.substring(0, newIds.length() - 1));
         } catch (RuntimeException e) {
-            throw new ServiceException("数据查询出错：" + e);
+            throw new ServiceException("<List>根据Id查询出错：" + e);
         }
     }
 
     @Override
-    public List<T> getByIds(Set<String> ids) throws ServiceException {
+    public List<T> getByIds(Set<String> ids) {
         if (CollectionUtils.isEmpty(ids))
             return new ArrayList<>();
         try {
             String newIds = formatMapperIds(ids);
             return this.mapper.selectByIds(newIds.substring(0, newIds.length() - 1));
         } catch (RuntimeException e) {
-            throw new ServiceException("数据查询出错：" + e);
+            throw new ServiceException("<Set>根据Id查询出错：" + e);
         }
     }
 
     @Override
-    public List<T> getAll() throws ServiceException {
+    public List<T> getAll() {
         try {
             return this.mapper.selectAll();
         } catch (RuntimeException e) {
-            throw new ServiceException("数据查询出错：" + e);
+            throw new ServiceException("查询全部出错：" + e);
         }
     }
 
     @Override
-    public int getCount(T query) throws ServiceException {
-        Assert.notNull(query, "出错信息：参数为null");
+    public int getCount(T query) {
+        Assert.notNull(query, NULL_ERROR_MSG);
         try {
             return this.mapper.selectCount(query);
         } catch (RuntimeException e) {
@@ -140,8 +142,8 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public int getCountByCondition(T query) throws ServiceException {
-        Assert.notNull(query, "出错信息：参数为null");
+    public int getCountByCondition(T query) {
+        Assert.notNull(query, NULL_ERROR_MSG);
         try {
             Example example = CriteriaUtil.setFieldQueryLikeCondtion(query);
             return this.mapper.selectCountByExample(example);
@@ -151,8 +153,8 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public String save(T entity) throws ServiceException {
-        Assert.notNull(entity, "出错信息：参数为null");
+    public String save(T entity) {
+        Assert.notNull(entity, NULL_ERROR_MSG);
         try {
             Set<EntityColumn> pkColumns = EntityHelper.getPKColumns(entity.getClass());
             EntityColumn pkColumn = pkColumns.iterator().next();
@@ -173,7 +175,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public void saveInBatch(List<T> entitys) throws ServiceException {
+    public void saveInBatch(List<T> entitys) {
         if (CollectionUtils.isEmpty(entitys))
             return;
         try {
@@ -193,8 +195,8 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public int update(T entity) throws ServiceException {
-        Assert.notNull(entity, "出错信息：参数为null");
+    public int update(T entity) {
+        Assert.notNull(entity, NULL_ERROR_MSG);
         try {
             return this.mapper.updateByPrimaryKeySelective(entity);
         } catch (RuntimeException e) {
@@ -203,7 +205,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public void updateInBatch(List<T> entitys) throws ServiceException {
+    public void updateInBatch(List<T> entitys) {
         if (CollectionUtils.isEmpty(entitys))
             return;
         try {
@@ -214,8 +216,8 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public String saveOrUpdate(T entity) throws ServiceException {
-        Assert.notNull(entity, "出错信息：参数为null");
+    public String saveOrUpdate(T entity) {
+        Assert.notNull(entity, NULL_ERROR_MSG);
         String id;
         try {
             if (BaseUtil.isIdNull(entity)) {
@@ -233,7 +235,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public int saveOrUpdateInBatch(List<T> entitys) throws ServiceException {
+    public int saveOrUpdateInBatch(List<T> entitys) {
         if (CollectionUtils.isEmpty(entitys))
             return -1;
         List saves = new ArrayList();
@@ -255,8 +257,8 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public int delete(T entity) throws ServiceException {
-        Assert.notNull(entity, "出错信息：参数为null");
+    public int delete(T entity) {
+        Assert.notNull(entity, NULL_ERROR_MSG);
         try {
             return this.mapper.delete(entity);
         } catch (RuntimeException e) {
@@ -265,7 +267,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public int deleteById(String id) throws ServiceException {
+    public int deleteById(String id) {
         if (StringUtils.isBlank(id))
             throw new ServiceException("删除出错：Id为空");
         try {
@@ -276,9 +278,9 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public void deleteByIdInBatch(String ids) throws ServiceException {
+    public void deleteByIdInBatch(String ids) {
         if (StringUtils.isBlank(ids))
-            throw new ServiceException("删除出错：Id为空");
+            throw new ServiceException("批量删除出错：Id为空");
         try {
             deleteByIdBySql(ids.split(","));
         } catch (RuntimeException e) {
@@ -287,9 +289,9 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
     }
 
     @Override
-    public void deleteByIdInBatch(List<String> ids) throws ServiceException {
+    public void deleteByIdInBatch(List<String> ids) {
         if (CollectionUtils.isEmpty(ids))
-            throw new ServiceException("删除出错：Id为空");
+            throw new ServiceException("批量删除出错：Id为空");
         try {
             String[] id = new String[ids.size()];
             ids.toArray(id);

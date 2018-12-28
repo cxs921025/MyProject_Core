@@ -48,11 +48,11 @@ public class ReturnVo {
     }
 
     public String getJsonStr() {
-        JSONObject obj = new JSONObject();
-        obj.put("success", isSuccess());
-        obj.put("msg", getMsg());
-        obj.put("obj", this.obj);
-        obj.put("attributes", this.attributes);
-        return obj.toString();
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("success", isSuccess());
+        jsonObj.put("msg", getMsg());
+        jsonObj.put("obj", this.obj);
+        jsonObj.put("attributes", this.attributes);
+        return jsonObj.toString();
     }
 }

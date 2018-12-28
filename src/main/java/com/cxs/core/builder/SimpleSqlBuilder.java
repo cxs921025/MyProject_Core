@@ -1,5 +1,6 @@
 package com.cxs.core.builder;
 
+import com.cxs.core.exception.ServiceException;
 import com.cxs.core.utils.LogUtil;
 import com.cxs.core.utils.ObjectUtil;
 import org.springframework.util.CollectionUtils;
@@ -44,12 +45,11 @@ public class SimpleSqlBuilder<T> {
         if (entityClass.isAnnotationPresent(Table.class)) {
             Table table = entityClass.getAnnotation(Table.class);
             if (!(table.name().equals(""))) {
-                this.tableName = table.name();
+                setTableName(table.name());
             }
         }
 
-        setTableName(this.tableName);
-        List columnFields = ObjectUtil.getFieldsByAnnotation(this.entityClass, Transient.class);
+        List columnFields = ObjectUtil.getFieldsByAnnotation(this.entityClass);
         if (CollectionUtils.isEmpty(columnFields)) {
             return;
         }
@@ -57,9 +57,7 @@ public class SimpleSqlBuilder<T> {
         Map mapping = new HashMap();
         for (Object f : columnFields) {
             Field field = (Field) f;
-            if (field.isAnnotationPresent(Transient.class))
-                continue;
-            if (Modifier.isStatic(field.getModifiers())) {
+            if (field.isAnnotationPresent(Transient.class) || Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
 
@@ -70,13 +68,7 @@ public class SimpleSqlBuilder<T> {
                 }
             }
             Column column = field.getAnnotation(Column.class);
-            String name;
-            if (column != null) {
-                name = column.name();
-            } else {
-                name = field.getName();
-                name = StringUtil.camelhumpToUnderline(name);
-            }
+            String name = column == null ? StringUtil.camelhumpToUnderline(field.getName()) : column.name();
             mapping.put(field.getName(), name);
         }
         setFieldColumnMapping(mapping);
@@ -110,7 +102,7 @@ public class SimpleSqlBuilder<T> {
                 }
                 params.put(field, value);
             } catch (Exception e) {
-                throw new RuntimeException("getSqlParameters exception!", e);
+                throw new ServiceException("getSqlParameters exception!", e);
             }
         }
         return params;

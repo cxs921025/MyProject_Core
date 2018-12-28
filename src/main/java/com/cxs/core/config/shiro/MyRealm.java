@@ -30,7 +30,7 @@ public class MyRealm extends AuthorizingRealm {
      * @return 返回封装了用户信息的 AuthenticationInfo 实例
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         LogUtil.info("[身份认证]: " + token.getUsername());
         // 从数据库获取对应用户名密码的用户

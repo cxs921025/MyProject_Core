@@ -51,7 +51,7 @@ public class SysUserModel extends BaseModel {
      * 电子邮箱
      */
     @Column(name = "EMAIL")
-    private String Email;
+    private String email;
     /**
      * 权限表主键
      */
