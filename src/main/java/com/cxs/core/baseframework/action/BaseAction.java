@@ -61,7 +61,7 @@ public class BaseAction<T> extends WebApplicationObjectSupport {
             returnVo.setAttributes(attributesMap);
         } catch (ServiceException e) {
             returnVo.setSuccess(false);
-            returnVo.setMsg("模糊获取失败失败: " + e.getMessage());
+            returnVo.setMsg("数据获取失败: " + e.getMessage());
             LogUtil.error("[" + this.getClass().toString() + "] 模糊获取失败: " + e.getMessage());
         }
         return returnVo;
@@ -84,7 +84,7 @@ public class BaseAction<T> extends WebApplicationObjectSupport {
             returnVo.setAttributes(attributesMap);
         } catch (ServiceException e) {
             returnVo.setSuccess(false);
-            returnVo.setMsg("精确获取失败失败: " + e.getMessage());
+            returnVo.setMsg("数据获取失败: " + e.getMessage());
             LogUtil.error("[" + this.getClass().toString() + "] 精确获取失败: " + e.getMessage());
         } catch (Exception e) {
             returnVo.setSuccess(false);
