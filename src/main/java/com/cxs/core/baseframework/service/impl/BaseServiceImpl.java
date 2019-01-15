@@ -10,6 +10,7 @@ import com.cxs.core.utils.EntityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.EntityColumn;
@@ -23,6 +24,8 @@ import java.util.*;
  * @author ChenXS The implementation class of BaseService
  */
 @SuppressWarnings("unchecked")
+// 添加事务控制, 子类会继承
+@Transactional
 public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     private static final String NULL_ERROR_MSG = "错误信息：参数为null";
@@ -44,8 +47,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public T getById(String id) {
-        if (StringUtils.isBlank(id))
-            throw new ServiceException("查询出错：Id为空");
+        if (StringUtils.isBlank(id)) throw new ServiceException("查询出错：Id为空");
         try {
             return this.mapper.selectByPrimaryKey(id);
         } catch (TooManyResultsException e) {
@@ -88,8 +90,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public List<T> getByIds(String ids) {
-        if (StringUtils.isBlank(ids))
-            return new ArrayList<>();
+        if (StringUtils.isBlank(ids)) return new ArrayList<>();
         try {
             String newIds = formatMapperIds(Arrays.asList(ids.split(",")));
             return this.mapper.selectByIds(newIds.substring(0, newIds.length() - 1));
@@ -100,8 +101,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public List<T> getByIds(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids))
-            return new ArrayList<>();
+        if (CollectionUtils.isEmpty(ids)) return new ArrayList<>();
         try {
             String newIds = formatMapperIds(ids);
             return this.mapper.selectByIds(newIds.substring(0, newIds.length() - 1));
@@ -112,8 +112,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public List<T> getByIds(Set<String> ids) {
-        if (CollectionUtils.isEmpty(ids))
-            return new ArrayList<>();
+        if (CollectionUtils.isEmpty(ids)) return new ArrayList<>();
         try {
             String newIds = formatMapperIds(ids);
             return this.mapper.selectByIds(newIds.substring(0, newIds.length() - 1));
@@ -176,8 +175,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public void saveInBatch(List<T> entitys) {
-        if (CollectionUtils.isEmpty(entitys))
-            return;
+        if (CollectionUtils.isEmpty(entitys)) return;
         try {
             // 利用反射清除id的值
             for (T entity : entitys) {
@@ -206,8 +204,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public void updateInBatch(List<T> entitys) {
-        if (CollectionUtils.isEmpty(entitys))
-            return;
+        if (CollectionUtils.isEmpty(entitys)) return;
         try {
             updateList(entitys);
         } catch (RuntimeException e) {
@@ -236,8 +233,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public int saveOrUpdateInBatch(List<T> entitys) {
-        if (CollectionUtils.isEmpty(entitys))
-            return -1;
+        if (CollectionUtils.isEmpty(entitys)) return -1;
         List saves = new ArrayList();
         List updates = new ArrayList();
         try {
@@ -268,8 +264,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public int deleteById(String id) {
-        if (StringUtils.isBlank(id))
-            throw new ServiceException("删除出错：Id为空");
+        if (StringUtils.isBlank(id)) throw new ServiceException("删除出错：Id为空");
         try {
             return this.mapper.deleteByPrimaryKey(id);
         } catch (RuntimeException e) {
@@ -279,8 +274,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public void deleteByIdInBatch(String ids) {
-        if (StringUtils.isBlank(ids))
-            throw new ServiceException("批量删除出错：Id为空");
+        if (StringUtils.isBlank(ids)) throw new ServiceException("批量删除出错：Id为空");
         try {
             deleteByIdBySql(ids.split(","));
         } catch (RuntimeException e) {
@@ -290,8 +284,7 @@ public class BaseServiceImpl<T> extends SqlMapper<T> implements BaseService<T> {
 
     @Override
     public void deleteByIdInBatch(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids))
-            throw new ServiceException("批量删除出错：Id为空");
+        if (CollectionUtils.isEmpty(ids)) throw new ServiceException("批量删除出错：Id为空");
         try {
             String[] id = new String[ids.size()];
             ids.toArray(id);

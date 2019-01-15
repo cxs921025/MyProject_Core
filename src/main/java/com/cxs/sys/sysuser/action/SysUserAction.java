@@ -6,6 +6,8 @@ import com.cxs.core.utils.LogUtil;
 import com.cxs.core.utils.SessionUtil;
 import com.cxs.core.vo.ReturnVo;
 import com.cxs.sys.sysuser.model.SysUserModel;
+import com.cxs.sys.sysuser.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sys/sysuser")
 @RestController
 public class SysUserAction extends BaseAction<SysUserModel> {
+    final SysUserService sysUserService;
+
+    @Autowired
+    public SysUserAction(SysUserService sysUserService) {
+        this.sysUserService = sysUserService;
+    }
 
     @RequestMapping("getUser")
     public ReturnVo getUser() {
@@ -29,6 +37,23 @@ public class SysUserAction extends BaseAction<SysUserModel> {
             aj.setSuccess(false);
         } catch (Exception e) {
             LogUtil.error(e);
+        }
+        return aj;
+    }
+
+    @RequestMapping("saveUser")
+    public ReturnVo saveUser() {
+        ReturnVo aj = new ReturnVo();
+        try {
+            sysUserService.saveUserAndRole();
+        } catch (ServiceException e) {
+            LogUtil.error(e);
+            aj.setMsg(e.getMessage());
+            aj.setSuccess(false);
+        } catch (Exception e) {
+            LogUtil.error(e);
+            aj.setMsg("服务器异常");
+            aj.setSuccess(false);
         }
         return aj;
     }

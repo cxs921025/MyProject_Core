@@ -1,14 +1,13 @@
 package com.cxs.sys.sysuser.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.cxs.core.baseframework.model.BaseModel;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author ChenXS
