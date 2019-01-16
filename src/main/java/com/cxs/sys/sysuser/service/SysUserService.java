@@ -24,9 +24,4 @@ public interface SysUserService extends BaseService<SysUserModel> {
      * @return 用户实体
      */
     SysUserModel getUserModelWithBlurry(String loginName);
-
-    /**
-     * 测试事务
-     */
-    void saveUserAndRole();
 }
