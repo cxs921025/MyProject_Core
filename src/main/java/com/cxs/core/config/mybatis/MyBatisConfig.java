@@ -25,6 +25,7 @@ import java.util.Properties;
  * This is the configuration file for MyBatis
  */
 @Configuration
+// 开启事务
 @EnableTransactionManagement
 public class MyBatisConfig implements TransactionManagementConfigurer {
 
@@ -40,7 +41,6 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
     public SqlSessionFactory sqlSessionFactoryBean() {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setTypeAliasesPackage("com.cxs.*.*.model");
 
         //分页插件
         PageHelper pageHelper = new PageHelper();
@@ -49,6 +49,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         properties.setProperty("supportMethodsArguments", "true");
         properties.setProperty("returnPageInfo", "check");
         properties.setProperty("params", "count=countSql");
+        properties.setProperty("showSql", "true");
         pageHelper.setProperties(properties);
 
         //添加插件

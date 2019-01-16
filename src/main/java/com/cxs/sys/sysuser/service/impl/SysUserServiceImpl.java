@@ -30,13 +30,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserModel> implements
     }
 
     @Override
-    public String getRole(String username) {
-        return userMapper.getRole(username);
+    public String getRole(String loginName) {
+        return userMapper.getRole(loginName);
     }
 
     @Override
-    public SysUserModel getUserModelWithBlurry(String username) {
-        return userMapper.getUserModelWithBlurry(username);
+    public SysUserModel getUserModelWithBlurry(String loginName) {
+        return userMapper.getUserModelWithBlurry(loginName);
     }
 
     @Override

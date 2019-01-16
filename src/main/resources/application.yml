@@ -1,8 +1,7 @@
-server:
-  port: 8888
 spring:
   datasource:
     # 172.26.1.53
+    type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://127.0.0.1:3306/my_project
     username: cxs
     password: 123456
